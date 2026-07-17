@@ -102,18 +102,35 @@ def convert_dicom_to_nifti(dicom_file: str, output_dir: str, tmp_dir: str = None
 
         # Run dcm2niix and output to temp_output_dir
         subprocess.run(
-            ["dcm2niix", "-o", temp_output_dir, "-z", "n", "-v", "y", "-f", "%p", tmp_dicom_path],
+            ["dcm2niix", "-o", temp_output_dir, "-z", "y", "-v", "y", "-f", "%p", tmp_dicom_path],
             check=True
         )
 
         # Identify generated NIfTI and JSON files in temp_output_dir
-        nifti_files = [f for f in os.listdir(temp_output_dir) if f.endswith(".nii")]
-        json_files = [f for f in os.listdir(temp_output_dir) if f.endswith(".json")]
+        def _stem(fname):
+            for ext in (".nii.gz", ".nii", ".json"):
+                if fname.endswith(ext):
+                    return fname[:-len(ext)]
+            return fname
+
+        all_files = os.listdir(temp_output_dir)
+        nifti_files = [f for f in all_files if f.endswith(".nii.gz") or f.endswith(".nii")]
+        json_files  = [f for f in all_files if f.endswith(".json")]
         if not nifti_files or not json_files:
             raise FileNotFoundError("NIfTI or JSON files were not generated in the temporary directory.")
 
-        nifti_file = os.path.join(temp_output_dir, nifti_files[0])
-        json_file = os.path.join(temp_output_dir, json_files[0])
+        # Match NIfTI and JSON by shared filename stem to avoid cross-series pairing
+        nifti_by_stem = {_stem(f): f for f in nifti_files}
+        json_by_stem  = {_stem(f): f for f in json_files}
+        common_stems  = sorted(set(nifti_by_stem) & set(json_by_stem))
+        if not common_stems:
+            raise FileNotFoundError("No matching NIfTI/JSON pairs found after conversion.")
+        if len(common_stems) > 1:
+            print(f"Warning: {len(common_stems)} series detected. Processing only: {common_stems[0]}")
+
+        stem = common_stems[0]
+        nifti_file = os.path.join(temp_output_dir, nifti_by_stem[stem])
+        json_file  = os.path.join(temp_output_dir, json_by_stem[stem])
         
         # Move the files to the output directory
         final_nifti_path = os.path.join(output_dir, os.path.basename(nifti_file))
