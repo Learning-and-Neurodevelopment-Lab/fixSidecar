@@ -6,6 +6,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.7.2] - 2026-08-07
+
+### Changed
+
+- **`dcm_convert.py`** — Renamed `--no-fmri` to `--no-epi`. FixSidecar's sidecar
+  harmonization applies to any EPI acquisition (fMRI and DWI alike), not just fMRI,
+  so `--no-fmri` was a misleading name for what it actually skips. This is a
+  breaking CLI change: update any scripts that pass `--no-fmri`.
+
+---
+
 ## [0.7.1] - 2026-07-16
 
 ### Fixed
