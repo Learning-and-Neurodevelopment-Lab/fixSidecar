@@ -4,7 +4,7 @@
 
 This tool converts DICOM files to NIfTI format and programmatically harmonizes the resulting JSON sidecar to ensure compliance with BIDS (Brain Imaging Data Structure) metadata standards.
 
-Version **v0.7.0** introduces a generalized and extensible slice-order framework, legacy acquisition preservation, metadata provenance tracking, and improved CLI consistency.
+Version **v0.7.2** introduces a generalized and extensible slice-order framework, legacy acquisition preservation, metadata provenance tracking, and improved CLI consistency (including renaming `--no-fmri` to `--no-epi`, since FixSidecar harmonizes sidecars for DWI as well as fMRI).
 
 ---
 
@@ -229,8 +229,8 @@ python update_json_sidecar.py <dicom_file> <json_file> <output_file> [options]
 
 ### Optional Flags
 
-* `--no-fmri`
-  Skip JSON-sidecar update (useful for structural or non-fMRI data).
+* `--no-epi`
+  Skip JSON-sidecar update (useful for structural or non-EPI data; FixSidecar also handles DWI, not just fMRI).
 
 * `--exam-card <path>`
   Path to a Philips Exam Card file for additional metadata extraction.

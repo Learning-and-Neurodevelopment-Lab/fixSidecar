@@ -22,7 +22,7 @@ Created on Tue Oct 21 17:05:44 2024
 ###################   - PhaseEncodingDirection inference with optional manual override               ###################
 ###################   - Provenance tracking of computed vs manual metadata                           ###################
 ###################                                                                                   ###################
-################### Version:        0.7.0                                                             ###################
+################### Version:        0.7.2                                                             ###################
 ###################                                                                                   ###################
 ################### Requirements:                                                                     ###################
 ###################   - Python modules: nibabel, dipy, pydicom                                       ###################
@@ -45,6 +45,12 @@ Created on Tue Oct 21 17:05:44 2024
 ###################                                                                                   ###################
 #########################################################################################################################
 #########################################################################################################################
+###################                                                                                   ###################
+################### v0.7.2 Updates:                                                                   ###################
+###################   - Renamed --no-fmri to --no-epi (FixSidecar also harmonizes DWI, not just fMRI) ###################
+###################                                                                                   ###################
+#########################################################################################################################
+#########################################################################################################################
 """
 
 
@@ -57,7 +63,7 @@ import sys
 from update_json_sidecar import update_json_with_dicom_info
 
 __title__ = "DICOM Convert and BIDS Sidecar Harmonization"
-__version__ = "0.7.0"
+__version__ = "0.7.2"
 __author__ = "Gabriele Amorosino"
 __contact__ = "gabriele.amorosino@utexas.edu"
 
@@ -156,8 +162,8 @@ def main():
     parser.add_argument("dicom_file", help="Path to the DICOM file or directory.")
     parser.add_argument("output_dir", help="Output directory for the NIfTI and JSON files.")
     parser.add_argument(
-        "--no-fmri",
-        help="Skip JSON-sidecar update (useful for structural or non-fMRI data).",
+        "--no-epi",
+        help="Skip JSON-sidecar update (useful for structural or non-EPI data; FixSidecar also handles DWI, not just fMRI).",
         action="store_true",
     )
     parser.add_argument("--exam-card", help="Path to the exam card file.", default=None)
@@ -207,7 +213,7 @@ def main():
     )
 
     # Step 2: update JSON sidecar unless the user asked not to
-    if not args.no_fmri:
+    if not args.no_epi:
         slice_order_step = args.slice_order_step
         if slice_order_step is None:
             slice_order_step = 4 if args.slice_order_mode == "legacy" else 1

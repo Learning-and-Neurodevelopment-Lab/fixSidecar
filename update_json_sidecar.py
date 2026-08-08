@@ -21,7 +21,7 @@ Created on Tue Oct 21 17:05:44 2024
 ###################   - Philips-specific readout computation support                                 ###################
 ###################   - Metadata provenance tracking (manual vs computed fields)                     ###################
 ###################                                                                                   ###################
-################### Version:        0.7.0                                                             ###################
+################### Version:        0.7.2                                                             ###################
 ###################                                                                                   ###################
 ################### Requirements:                                                                     ###################
 ###################   - Python modules: pydicom, numpy                                               ###################
@@ -54,7 +54,7 @@ import ast
 import re
 
 __title__ = "BIDS JSON Sidecar Harmonization Engine"
-__version__ = "0.7.0"
+__version__ = "0.7.2"
 __author__ = "Gabriele Amorosino"
 __contact__ = "gabriele.amorosino@utexas.edu"
 
