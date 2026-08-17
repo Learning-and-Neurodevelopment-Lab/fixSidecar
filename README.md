@@ -4,7 +4,7 @@
 
 This tool converts DICOM files to NIfTI format and programmatically harmonizes the resulting JSON sidecar to ensure compliance with BIDS (Brain Imaging Data Structure) metadata standards.
 
-Version **v0.7.2** introduces a generalized and extensible slice-order framework, legacy acquisition preservation, metadata provenance tracking, and improved CLI consistency (including renaming `--no-fmri` to `--no-epi`, since FixSidecar harmonizes sidecars for DWI as well as fMRI).
+Version **v0.7.3** introduces a generalized and extensible slice-order framework, legacy acquisition preservation, metadata provenance tracking, and improved CLI consistency (including renaming `--no-fmri` to `--no-epi`, since FixSidecar harmonizes sidecars for DWI as well as fMRI), plus a self-contained Docker/Singularity runtime that needs nothing installed locally.
 
 ---
 
@@ -195,6 +195,49 @@ pip install -r requirements.txt
 conda env create -f res/config/fixSidecar.yml
 conda activate fixSidecar
 ```
+
+### Docker / Singularity / Apptainer
+
+A self-contained image (Python + `pydicom`/`numpy` + `dcm2niix`, no local
+install required) is published at
+[`gamorosino/fixsidecar`](https://hub.docker.com/r/gamorosino/fixsidecar) and
+can also be built locally from `docker/Dockerfile`.
+
+**Docker**, pulling the published image:
+
+```bash
+docker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/data \
+    gamorosino/fixsidecar:0.7.3 dcm_convert.py example_dicom_folder output_directory
+```
+
+Or build it yourself from the repository root:
+
+```bash
+docker build -f docker/Dockerfile -t fixsidecar .
+docker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/data \
+    fixsidecar dcm_convert.py example_dicom_folder output_directory
+```
+
+**Singularity / Apptainer**, pulling the same image directly (no local build,
+no Docker installation required):
+
+```bash
+singularity run --bind "$(pwd)":/data docker://gamorosino/fixsidecar:0.7.3 \
+    dcm_convert.py example_dicom_folder output_directory
+```
+
+(`apptainer` is a drop-in replacement for `singularity` on systems that use it
+instead — the same command works with `apptainer run ...`.)
+
+`update_json_sidecar.py` is invoked the same way, e.g.:
+
+```bash
+docker run --rm --user "$(id -u):$(id -g)" -v "$(pwd)":/data \
+    gamorosino/fixsidecar:0.7.3 update_json_sidecar.py example.dcm existing.json updated.json
+```
+
+All paths passed to either script should be relative to the bind-mounted
+directory (`/data`, mapped to your current directory in the examples above).
 
 ---
 # Usage
