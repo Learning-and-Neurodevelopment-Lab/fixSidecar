@@ -6,6 +6,26 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.7.3] - 2026-08-07
+
+### Added
+
+- **`docker/Dockerfile`** — Self-contained runtime image (Python 3.9 + `pydicom`,
+  `numpy`, and `dcm2niix` installed from Debian's package) so `dcm_convert.py`
+  and `update_json_sidecar.py` can be run via Docker or Singularity/Apptainer
+  without installing anything locally. See the README's "Running via Docker /
+  Singularity / Apptainer" section. Published as `gamorosino/fixsidecar` on
+  Docker Hub.
+- **Clear error for `.ExamCard` input** — `--exam-card` now detects Philips's
+  proprietary SOAP/XML `.ExamCard` format (the scanner console's protocol-editor
+  export) and raises a descriptive `ValueError` instead of silently reporting
+  "no match" per series. That format carries no readable acquisition parameters
+  and would require a Philips-proprietary decoder we don't have; the message
+  points users to the `.txt`/`.html` export of the same protocol, which
+  FixSidecar already parses successfully.
+
+---
+
 ## [0.7.2] - 2026-08-07
 
 ### Changed
