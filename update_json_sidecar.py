@@ -21,7 +21,7 @@ Created on Tue Oct 21 17:05:44 2024
 ###################   - Philips-specific readout computation support                                 ###################
 ###################   - Metadata provenance tracking (manual vs computed fields)                     ###################
 ###################                                                                                   ###################
-################### Version:        0.7.2                                                             ###################
+################### Version:        0.7.3                                                             ###################
 ###################                                                                                   ###################
 ################### Requirements:                                                                     ###################
 ###################   - Python modules: pydicom, numpy                                               ###################
@@ -54,7 +54,7 @@ import ast
 import re
 
 __title__ = "BIDS JSON Sidecar Harmonization Engine"
-__version__ = "0.7.2"
+__version__ = "0.7.3"
 __author__ = "Gabriele Amorosino"
 __contact__ = "gabriele.amorosino@utexas.edu"
 
@@ -267,6 +267,19 @@ def match_protocol_in_exam_card(series_description, exam_card_path):
     capture = False
     normalized_series_description = series_description.strip().lower()
     with open(exam_card_path, 'r') as file:
+        header = file.read(200)
+        if "<soap-env:envelope" in header.lower():
+            raise ValueError(
+                f"'{exam_card_path}' is a Philips .ExamCard file: a proprietary "
+                "SOAP/XML protocol definition for the scanner console's exam-card "
+                "editor, not a parameter report. It does not contain readable "
+                "acquisition parameters (TR, slices, MB/EPI factor, bandwidth), "
+                "and decoding it requires a Philips-proprietary tool this project "
+                "does not have. Instead, export the same protocol as .txt or .html "
+                "from the scanner console (or a standalone Exam Card viewer) and "
+                "pass that file to --exam-card."
+            )
+        file.seek(0)
         lines = file.readlines()
         for i, line in enumerate(lines):
             normalized_line = line.strip().lower()
