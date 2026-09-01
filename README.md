@@ -27,8 +27,8 @@ Awards Wellcome 226486/Z/22/Z and NIH NINDS U24-NS140384 to F. Pestilli and NIH 
 If this tool contributes to your research, please cite:
 
 > Amorosino, G., Vinci-Booher, S., & Pestilli, F.  
-> *Advancing FAIR data by facilitating the conversion of DICOM to NIfTI.*  
-> In preparation.
+> *FixSidecar: harmonizing BIDS metadata during DICOM-to-NIfTI conversion for neuroimaging data with incomplete DICOM headers.*  
+> Manuscript submitted to Aperture Neuro.
 
 ## Key Capabilities
 
