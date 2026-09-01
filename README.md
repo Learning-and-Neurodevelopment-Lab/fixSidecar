@@ -28,7 +28,7 @@ If this tool contributes to your research, please cite:
 
 > Amorosino, G., Vinci-Booher, S., & Pestilli, F.  
 > *FixSidecar: harmonizing BIDS metadata during DICOM-to-NIfTI conversion for neuroimaging data with incomplete DICOM headers.*  
-> Manuscript submitted to Aperture Neuro.
+> Manuscript in preparation.
 
 ## Key Capabilities
 
