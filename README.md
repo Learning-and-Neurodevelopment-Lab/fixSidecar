@@ -1,3 +1,15 @@
+# ⚠️ DEPRECATED — Renamed to BIDSCard
+
+**This project has been renamed to BIDSCard and moved to
+[github.com/gamorosino/BIDSCard](https://github.com/gamorosino/BIDSCard).**
+
+This repository (`fixSidecar`) is no longer maintained. The new repository
+includes the full history of this one plus all ongoing development, the
+renamed `gamorosino/bidscard` Docker Hub image, and the current
+documentation. Please switch to it.
+
+---
+
 # Fix Sidecar
 
 ## **Overview**
